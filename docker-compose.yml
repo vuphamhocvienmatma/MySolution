@@ -1,5 +1,4 @@
-﻿version: '3.8'
-
+﻿# Thuộc tính 'version' không còn cần thiết và đã được xóa
 services:
   # === Application Services ===
   api-gateway:
@@ -7,17 +6,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ["dotnet", "ApiGateway.dll"] 
+      target: api-gateway-final 
+    command: ["dotnet", "ApiGateway.dll"]
     ports:
-      - "7100:8080" 
+      - "7100:8080"
       - "7101:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:8081;http://+:8080
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=your_dev_cert_password 
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_URLS=http://+:8080
     volumes:
-      - ~/.aspnet/https:/https/:ro 
+      - ~/.aspnet/https:/https/:ro
     depends_on:
       - web-api
 
@@ -26,9 +24,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ["dotnet", "WebAPI.dll"] 
-    ports:
-      - "7024:8081" 
+      target: web-api-final 
+    command: ["dotnet", "WebAPI.dll"]
+    ports: []      
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:8081;http://+:8080
@@ -57,7 +55,7 @@ services:
     ports:
       - "1433:1433"
     healthcheck:
-      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrong!Password123", "-Q", "SELECT 1"]
+      test: ["CMD", "/opt/mssql/bin/healthcheck"]
       interval: 10s
       timeout: 3s
       retries: 10
