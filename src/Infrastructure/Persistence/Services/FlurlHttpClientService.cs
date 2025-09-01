@@ -1,6 +1,4 @@
-﻿
-
-namespace Infrastructure.Http;
+﻿namespace Infrastructure.Http;
 
 public class FlurlHttpClientService : IHttpClientService
 {
