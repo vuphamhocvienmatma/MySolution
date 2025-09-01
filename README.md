@@ -43,7 +43,6 @@ This project is built upon **Clean Architecture** principles to create a decoupl
 4.  Ensure all other settings (`JwtSettings`, `MessageBroker`, etc.) are configured as needed.
 
 ### Running the Project
-```bash
 # Navigate to the WebAPI project directory
 cd src/WebAPI
 
