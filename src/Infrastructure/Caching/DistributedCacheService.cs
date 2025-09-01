@@ -4,14 +4,10 @@ using System.Text.Json;
 
 namespace Infrastructure.Caching;
 
-public class RedisCacheService : ICacheService
+public class DistributedCacheService : IDistributedCacheService
 {
     private readonly IDistributedCache _cache;
-
-    public RedisCacheService(IDistributedCache cache)
-    {
-        _cache = cache;
-    }
+    public DistributedCacheService(IDistributedCache cache) => _cache = cache;
 
     public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default)
     {

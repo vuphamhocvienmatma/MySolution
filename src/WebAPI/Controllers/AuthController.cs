@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Infrastructure.Persistence.Configurations;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,48 +13,42 @@ namespace WebAPI.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly IConfiguration _configuration;
-
-    public AuthController(IConfiguration configuration)
+    private readonly JwtSettings _jwtSettings;
+    public AuthController(IOptions<JwtSettings> jwtSettings)
     {
-        _configuration = configuration;
+        _jwtSettings = jwtSettings.Value;
     }
 
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginRequestDto request)
     {
-        // === TODO: Xác thực người dùng với database ===
-        // Trong thực tế, bạn sẽ kiểm tra request.Username và request.Password
-        // với thông tin user lưu trong database.
-        // Ở đây chúng ta giả định đăng nhập thành công.
         if (request.Username != "test" || request.Password != "password")
         {
             return Unauthorized("Invalid credentials");
         }
 
-        // Giả sử user có id và email sau khi xác thực
         var userId = Guid.NewGuid().ToString();
         var userEmail = "test@example.com";
 
-        // === Tạo Token ===
-        var issuer = _configuration["JwtSettings:Issuer"];
-        var audience = _configuration["JwtSettings:Audience"];
-        var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:Key"]!);
-
+        var issuer = _jwtSettings.Issuer;
+        var audience = _jwtSettings.Audience;
+        var key = Encoding.ASCII.GetBytes(_jwtSettings.Key!);
+        var userTenantId = "acme-corp"; // TODO: Lấy tenantId thực từ người dùng
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userId), // Subject = User ID
+                new Claim(JwtRegisteredClaimNames.Sub, userId), 
                 new Claim(JwtRegisteredClaimNames.Email, userEmail),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // JWT ID
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("tenantId", userTenantId), 
             }),
-            Expires = DateTime.UtcNow.AddMinutes(
-                double.Parse(_configuration["JwtSettings:TokenLifetimeMinutes"]!)),
-            Issuer = issuer,
-            Audience = audience,
+            Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.TokenLifetimeMinutes),
+            Issuer = _jwtSettings.Issuer,
+            Audience = _jwtSettings.Audience,
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();

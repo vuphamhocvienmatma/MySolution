@@ -1,5 +1,5 @@
 ﻿using Application.Common.Interfaces;
-using Domain.Entities; // Cần để deserialize
+using Domain.Entities; 
 using Domain.Entities.Users;
 using Domain.Outbox;
 using Infrastructure.Persistence;
@@ -11,58 +11,37 @@ using System.Text.Json;
 
 namespace Infrastructure.BackgroundJobs;
 
-public class ProcessOutboxMessagesJob : BackgroundService
+public class ProcessOutboxMessagesJob 
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly ApplicationDbContext _dbContext;
+    private readonly IElasticsearchService _elasticService;
     private readonly ILogger<ProcessOutboxMessagesJob> _logger;
 
-    public ProcessOutboxMessagesJob(IServiceProvider serviceProvider, ILogger<ProcessOutboxMessagesJob> logger)
+    public ProcessOutboxMessagesJob(
+        ApplicationDbContext dbContext,
+        IElasticsearchService elasticService,
+        ILogger<ProcessOutboxMessagesJob> logger)
     {
-        _serviceProvider = serviceProvider;
+        _dbContext = dbContext;
+        _elasticService = elasticService;
         _logger = logger;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    public async Task ExecuteAsync()
     {
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            try
-            {
-                await ProcessMessages(stoppingToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while processing outbox messages.");
-            }
-
-            await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken); // Chờ 10 giây trước khi quét lại
-        }
-    }
-
-    private async Task ProcessMessages(CancellationToken stoppingToken)
-    {
-        using var scope = _serviceProvider.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        var elasticService = scope.ServiceProvider.GetRequiredService<IElasticsearchService>();
-
-        var messages = await dbContext.OutboxMessages
+        var messages = await _dbContext.OutboxMessages
             .Where(m => m.ProcessedOnUtc == null)
-            .Take(20) 
-            .ToListAsync(stoppingToken);
-
+            .Take(20)
+            .ToListAsync();
         foreach (var message in messages)
         {
             try
             {
-              
                 var userContent = JsonSerializer.Deserialize<User>(message.Content);
-                if (userContent is null) continue;
-
-                if (message.Type == "UserCreated" || message.Type == "UserUpdated")
+                if (userContent is not null && (message.Type == "UserCreated" || message.Type == "UserUpdated"))
                 {
-                    await elasticService.IndexUserAsync(userContent, stoppingToken);
+                    await _elasticService.IndexUserAsync(userContent);
                 }
-
                 message.ProcessedOnUtc = DateTime.UtcNow;
             }
             catch (Exception ex)
@@ -74,7 +53,7 @@ public class ProcessOutboxMessagesJob : BackgroundService
 
         if (messages.Any())
         {
-            await dbContext.SaveChangesAsync(stoppingToken);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

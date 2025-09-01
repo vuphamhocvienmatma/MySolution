@@ -11,15 +11,13 @@ namespace WebAPI.Controllers;
 [Route("api/[controller]")]
 [Authorize] 
 [EnableRateLimiting("fixed")]
-public class UsersController : ControllerBase
+public class UsersController : ApiControllerBase
 {
-    private readonly ISender _mediator;
-    public UsersController(ISender mediator) => _mediator = mediator;
 
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
     {
-        var userId = await _mediator.Send(command);
+        var userId = await Mediator.Send(command);
         return CreatedAtAction(nameof(GetUserById), new { id = userId }, new { id = userId });
     }
 
@@ -27,7 +25,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetUserById(Guid id)
     {
         var query = new GetUserByIdQuery(id);
-        var user = await _mediator.Send(query);
+        var user = await Mediator.Send(query);
 
         return user is not null ? Ok(user) : NotFound();
     }
