@@ -1,4 +1,6 @@
-﻿namespace WebAPI.Extensions;
+﻿
+
+namespace WebAPI.Extensions;
 
 public static class MiddlewareExtensions
 {
@@ -14,6 +16,7 @@ public static class MiddlewareExtensions
         app.UseExceptionHandler();
         app.UseHttpsRedirection();
         app.UseRouting();
+        app.UseHttpMetrics();
         app.UseRateLimiter();
         app.UseAuthentication();
         app.UseMiddleware<TenantResolutionMiddleware>();
@@ -23,6 +26,7 @@ public static class MiddlewareExtensions
         {
             webAppEndpoints.MapControllers();
             webAppEndpoints.MapHub<Hubs.NotificationHub>("/notificationHub");
+            webAppEndpoints.MapMetrics();
         }
 
         return app;

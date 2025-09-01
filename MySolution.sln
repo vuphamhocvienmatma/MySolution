@@ -16,7 +16,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Packages.props = Directory.Packages.props
+		docker-compose.yml = docker-compose.yml
+		Dockerfile = Dockerfile
+		prometheus.yml = prometheus.yml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "src\ApiGateway\ApiGateway\ApiGateway.csproj", "{4FEA8EE3-7492-4D8B-A2AB-9D0BFCC62C9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +45,10 @@ Global
 		{1B0A04C3-E6BC-0FB7-7994-7C99BDAB1788}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B0A04C3-E6BC-0FB7-7994-7C99BDAB1788}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B0A04C3-E6BC-0FB7-7994-7C99BDAB1788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FEA8EE3-7492-4D8B-A2AB-9D0BFCC62C9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FEA8EE3-7492-4D8B-A2AB-9D0BFCC62C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FEA8EE3-7492-4D8B-A2AB-9D0BFCC62C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FEA8EE3-7492-4D8B-A2AB-9D0BFCC62C9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +58,7 @@ Global
 		{87EDA1D2-4B5B-E524-38CE-D0BFCA5F4D6B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{3D745DFE-AF9A-E111-755D-FD3FFF280728} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{1B0A04C3-E6BC-0FB7-7994-7C99BDAB1788} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{4FEA8EE3-7492-4D8B-A2AB-9D0BFCC62C9B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CB3D6182-C0C3-49BB-83F8-6FE2CB403619}

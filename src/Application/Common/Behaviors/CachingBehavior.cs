@@ -18,10 +18,9 @@ public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
     {
         _logger.LogInformation("Attempting to get from cache for key: {CacheKey}", request.CacheKey);
 
-        // Toàn bộ logic phức tạp đã nằm gọn trong GetOrCreateAsync
         return await _cacheService.GetOrCreateAsync(
             request.CacheKey,
-            () => next(), // Hàm factory chính là việc gọi handler tiếp theo trong pipeline
+            () => next(), 
             request.Expiration,
             cancellationToken);
     }

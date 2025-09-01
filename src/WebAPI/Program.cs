@@ -15,7 +15,8 @@ try
         .AddConfigurationSettings(builder.Configuration)
         .AddApplicationServices()
         .AddInfrastructureServices(builder.Configuration)
-        .AddWebAPIServices(builder.Configuration);
+        .AddWebAPIServices(builder.Configuration)
+        .AddObservability(builder.Configuration);
     var app = builder.Build();
     app.UseInfrastructure(builder.Configuration);
     app.RegisterHangfireJobs();

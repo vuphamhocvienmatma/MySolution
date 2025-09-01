@@ -34,4 +34,7 @@ global using System.Threading.RateLimiting;
 global using WebAPI.Extensions;
 global using WebAPI.Middleware;
 global using WebAPI.Services;
+global using Prometheus;
+global using OpenTelemetry.Resources;
+global using OpenTelemetry.Trace;
 

@@ -29,7 +29,6 @@ public class DistributedCacheService : IDistributedCacheService
         }
         else
         {
-            // Mặc định cache 5 phút nếu không chỉ định
             options.SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
         }
 

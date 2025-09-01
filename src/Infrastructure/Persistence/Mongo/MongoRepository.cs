@@ -6,7 +6,7 @@ public class MongoRepository<TDocument> : IMongoRepository<TDocument> where TDoc
     private readonly IMongoCollection<TDocument> _collection;
     private readonly string _tenantId;
 
-    public MongoRepository(IMongoDatabase database, ITenantService tenantService) // Inject ITenantService
+    public MongoRepository(IMongoDatabase database, ITenantService tenantService)
     {
         _collection = database.GetCollection<TDocument>(typeof(TDocument).Name);
         _tenantId = tenantService.TenantId ?? throw new InvalidOperationException("TenantId is required for MongoDB operations.");
