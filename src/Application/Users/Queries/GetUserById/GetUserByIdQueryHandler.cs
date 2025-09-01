@@ -1,6 +1,4 @@
-﻿using Application.Common.Interfaces;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿
 
 namespace Application.Users.Queries.GetUserById;
 

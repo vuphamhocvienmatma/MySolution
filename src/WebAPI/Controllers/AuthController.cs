@@ -1,10 +1,5 @@
-﻿using Infrastructure.Persistence.Configurations;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using WebAPI.DTOs;
 
 namespace WebAPI.Controllers;
@@ -38,10 +33,10 @@ public class AuthController : ControllerBase
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userId), 
+                new Claim(JwtRegisteredClaimNames.Sub, userId),
                 new Claim(JwtRegisteredClaimNames.Email, userEmail),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("tenantId", userTenantId), 
+                new Claim("tenantId", userTenantId),
             }),
             Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.TokenLifetimeMinutes),
             Issuer = _jwtSettings.Issuer,

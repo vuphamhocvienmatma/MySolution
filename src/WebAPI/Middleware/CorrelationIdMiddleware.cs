@@ -1,5 +1,4 @@
-﻿using Serilog.Context;
-namespace WebAPI.Middleware;
+﻿namespace WebAPI.Middleware;
 
 public class CorrelationIdMiddleware
 {
@@ -12,7 +11,7 @@ public class CorrelationIdMiddleware
     {
         var correlationId = context.Request.Headers[CorrelationIdHeaderName].FirstOrDefault() ?? Guid.NewGuid().ToString();
 
-        using (LogContext.PushProperty("CorrelationId", correlationId))
+        using (Serilog.Context.LogContext.PushProperty("CorrelationId", correlationId))
         {
             context.Response.OnStarting(() =>
             {

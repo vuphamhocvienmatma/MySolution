@@ -1,7 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Infrastructure.Persistence.Services;
-
-namespace WebAPI.Middleware;
+﻿namespace WebAPI.Middleware;
 
 public class TenantResolutionMiddleware
 {

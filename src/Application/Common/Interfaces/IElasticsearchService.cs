@@ -1,7 +1,4 @@
-﻿using Domain.Entities;
-using Domain.Entities.Users;
-
-namespace Application.Common.Interfaces;
+﻿namespace Application.Common.Interfaces;
 
 public interface IElasticsearchService
 {

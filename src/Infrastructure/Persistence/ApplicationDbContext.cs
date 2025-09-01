@@ -1,13 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Domain.Common;
-using Domain.Entities.Tenants;
-using Domain.Entities.Users;
-using Domain.Outbox;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
-using System.Linq.Expressions;
-using System.Reflection;
+﻿
 
 namespace Infrastructure.Persistence;
 
@@ -30,7 +21,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());      
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);
         modelBuilder.AddQueryFilter<IMustHaveTenant>(e => e.TenantId == _tenantService.TenantId);
 
@@ -50,12 +41,12 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             {
                 case EntityState.Added:
                     entry.Entity.CreatedOnUtc = DateTime.UtcNow;
-                    entry.Entity.CreatedBy = _currentUserService.UserId; 
+                    entry.Entity.CreatedBy = _currentUserService.UserId;
 
                     break;
                 case EntityState.Modified:
                     entry.Entity.LastModifiedOnUtc = DateTime.UtcNow;
-                    entry.Entity.LastModifiedBy = _currentUserService.UserId; 
+                    entry.Entity.LastModifiedBy = _currentUserService.UserId;
 
                     break;
             }

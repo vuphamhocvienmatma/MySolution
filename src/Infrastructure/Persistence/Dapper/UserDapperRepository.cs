@@ -1,9 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Dapper;
-using Domain.Entities;
-using Domain.Entities.Users;
-using Elastic.Clients.Elasticsearch;
-using System.Data;
+﻿
 
 namespace Infrastructure.Persistence.Dapper;
 
@@ -64,7 +59,7 @@ public class UserDapperRepository : IUserDapperRepository
 
     public async Task DeleteAsync(Guid id)
     {
-         await _connection.ExecuteAsync(
-           "DELETE FROM Users WHERE Id = @Id", new { Id = id }, _transaction);
+        await _connection.ExecuteAsync(
+          "DELETE FROM Users WHERE Id = @Id", new { Id = id }, _transaction);
     }
 }

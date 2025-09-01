@@ -1,11 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Domain.Entities;
-using Domain.Entities.Users;
-using Domain.Outbox;
-using Domain.Users.Events;
-using MediatR;
-using System.Text.Json;
-
+﻿
 namespace Application.Users.Commands.CreateUser;
 
 public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Guid>

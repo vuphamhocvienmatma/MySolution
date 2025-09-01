@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+﻿
 
 namespace Application.Users.Commands.CreateUser;
 

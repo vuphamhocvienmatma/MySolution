@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Library\Library.csproj" />
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
 
@@ -10,5 +9,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+		<PackageReference Include="Dapper" />
+		<PackageReference Include="Microsoft.Data.SqlClient" />
+		<PackageReference Include="MongoDB.Driver" />
+		<PackageReference Include="Elastic.Clients.Elasticsearch" />
+		<PackageReference Include="Flurl.Http" />
+		<PackageReference Include="Hangfire.SqlServer" />
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
+		<ProjectReference Include="..\Application\Application.csproj" />
+	</ItemGroup>
 </Project>

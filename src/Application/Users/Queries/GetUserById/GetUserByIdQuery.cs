@@ -1,5 +1,4 @@
-﻿using Application.Common.Behaviors;
-using MediatR;
+﻿
 
 namespace Application.Users.Queries.GetUserById;
 public record GetUserByIdQuery(Guid Id) : ICacheableQuery<UserDto?>

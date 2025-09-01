@@ -1,6 +1,4 @@
-﻿using Domain.Common;
-using System.Linq.Expressions;
-
+﻿
 namespace Application.Common.Interfaces;
 
 public interface IMongoRepository<TDocument> where TDocument : IDocument

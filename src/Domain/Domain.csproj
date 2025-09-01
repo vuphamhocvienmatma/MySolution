@@ -5,9 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Library\Library.csproj" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<PackageReference Include="MediatR" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" />
+		<PackageReference Include="MassTransit" />
+		<PackageReference Include="MongoDB.Driver" />
+	</ItemGroup>
 </Project>

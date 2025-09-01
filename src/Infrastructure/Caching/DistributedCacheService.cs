@@ -1,6 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Microsoft.Extensions.Caching.Distributed;
-using System.Text.Json;
+﻿
 
 namespace Infrastructure.Caching;
 

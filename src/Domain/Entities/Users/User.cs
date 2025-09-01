@@ -1,4 +1,4 @@
-﻿using Domain.Common;
+﻿
 namespace Domain.Entities.Users;
 
 public class User : BaseAuditableEntity, IMustHaveTenant

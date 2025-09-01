@@ -1,7 +1,4 @@
-﻿using MediatR;
-using Microsoft.Extensions.Logging;
-using System.Reflection;
-using System.Diagnostics;
+﻿
 
 namespace Application.Common.Behaviors;
 

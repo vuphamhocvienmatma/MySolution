@@ -1,7 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Domain.Common;
-using MongoDB.Driver;
-
+﻿
 namespace Infrastructure.Persistence.Mongo;
 
 public class MongoRepository<TDocument> : IMongoRepository<TDocument> where TDocument : IDocument
@@ -29,7 +26,7 @@ public class MongoRepository<TDocument> : IMongoRepository<TDocument> where TDoc
 
     public async Task InsertOneAsync(TDocument document)
     {
-        document.TenantId = _tenantId; 
+        document.TenantId = _tenantId;
         await _collection.InsertOneAsync(document);
     }
 

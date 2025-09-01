@@ -1,15 +1,12 @@
 ﻿using Application.Users.Commands.CreateUser;
 using Application.Users.Queries.GetUserById;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.RateLimiting;
 
 namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize] 
+[Authorize]
 [EnableRateLimiting("fixed")]
 public class UsersController : ApiControllerBase
 {

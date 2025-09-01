@@ -1,5 +1,4 @@
-﻿using Application.Common.Models;
-using Microsoft.EntityFrameworkCore;
+﻿
 
 namespace Application.Common.Extensions;
 

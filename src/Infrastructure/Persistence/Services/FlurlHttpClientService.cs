@@ -1,8 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Flurl.Http;
-using Microsoft.Extensions.Logging;
-using System.Threading; // Thêm using này nếu thiếu
-using System.Threading.Tasks; // Thêm using này nếu thiếu
+﻿
 
 namespace Infrastructure.Http;
 

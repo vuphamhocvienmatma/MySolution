@@ -1,7 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Domain.Entities;
-using Domain.Entities.Users;
-using Elastic.Clients.Elasticsearch;
+﻿using Elastic.Clients.Elasticsearch;
 
 namespace Infrastructure.Search;
 

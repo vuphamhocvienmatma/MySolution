@@ -1,17 +1,8 @@
-﻿using Application.Common.Interfaces;
-using Domain.Entities; 
-using Domain.Entities.Users;
-using Domain.Outbox;
-using Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System.Text.Json;
+﻿
 
 namespace Infrastructure.BackgroundJobs;
 
-public class ProcessOutboxMessagesJob 
+public class ProcessOutboxMessagesJob
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IElasticsearchService _elasticService;

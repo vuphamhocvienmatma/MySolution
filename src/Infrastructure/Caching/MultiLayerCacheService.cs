@@ -1,7 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Microsoft.Extensions.Caching.Memory; // Thư viện Memory Cache
-using Microsoft.Extensions.Logging;
-
+﻿
 namespace Infrastructure.Caching;
 
 public class MultiLayerCacheService : ICacheService
