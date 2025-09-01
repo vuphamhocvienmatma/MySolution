@@ -27,7 +27,7 @@ This project is built upon **Clean Architecture** principles to create a decoupl
 | **Background Jobs** | Hangfire                                   |
 | **API Security** | JWT, Rate Limiting, Multi-Tenancy          |
 | **Logging** | Serilog with Correlation ID                |
-
+| **Realtime** | SignalR               |
 ---
 ## 2. Getting Started 🚀
 
