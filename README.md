@@ -5,50 +5,80 @@ This document provides a comprehensive guide to the project's architecture, deve
 ---
 ## 1. Core Architecture 🏛️
 
-This project is built upon **Clean Architecture** principles to create a decoupled, maintainable, and testable system. The core idea is that business logic should not depend on technical implementation details.
+This project is built upon **Clean Architecture** principles to create a decoupled, maintainable, and testable system. The core idea is that business logic should not depend on technical implementation details. The system also includes an **API Gateway** to act as a single, secure entry point.
 
-**The Dependency Rule:** `WebAPI` → `Infrastructure` → `Application` → `Domain`
+**The Dependency Rule:** `WebAPI` → `Infrastructure` → `Application` → `Domain`. The `ApiGateway` is a separate entry point that forwards traffic to the `WebAPI`.
 
 ### Project Layers
-* **`Library`**: Centrailize Nuget Package
+
+* **`ApiGateway`**: The single entry point for all client requests. It handles cross-cutting concerns like Authentication, Rate Limiting, CORS, and Security Headers before forwarding traffic to the appropriate backend service.
 * **`Domain`**: The heart of the application. It contains the core business logic, entities, and domain events. It has **no dependencies** on other layers.
 * **`Application`**: Contains the application's use cases, orchestrated via the **CQRS pattern** (Commands and Queries). It defines interfaces for infrastructure concerns but does not implement them.
-* **`Infrastructure`**: Implements the interfaces defined in the `Application` layer. It contains all the technical details like database access (EF Core, Dapper), caching (Redis), external API calls (Flurl), and background job processing (Hangfire).
-* **`WebAPI`**: The entry point. It exposes the application's features via a RESTful API. Controllers here are kept "thin" by simply receiving HTTP requests and dispatching commands or queries to MediatR.
+* **`Infrastructure`**: Implements the interfaces defined in the `Application` layer. It contains all the technical details like database access (EF Core, Dapper), caching (Redis), and background job processing (Hangfire).
+* **`WebAPI`**: The backend service that contains the core business logic endpoints. It trusts that incoming requests have been vetted by the ApiGateway.
 
 ### Key Technologies
 
-| Area                  | Technology / Pattern                       |
-| --------------------- | ------------------------------------------ |
-| **Architecture** | Clean Architecture, DDD, CQRS              |
-| **Database** | EF Core, Dapper, MongoDB                   |
-| **Messaging** | MassTransit, RabbitMQ, Outbox Pattern      |
-| **Caching** | Multi-Layer Cache (In-Memory + Redis)      |
-| **Background Jobs** | Hangfire                                   |
-| **API Security** | JWT, Rate Limiting, Multi-Tenancy          |
-| **Logging** | Serilog with Correlation ID                |
-| **Realtime** | SignalR               |
+| Area | Technology / Pattern |
+| :--- | :--- |
+| **Architecture** | Clean Architecture, DDD, CQRS, API Gateway (YARP) |
+| **Database** | EF Core, Dapper, MongoDB |
+| **Messaging** | MassTransit, RabbitMQ, Outbox Pattern |
+| **Caching** | Multi-Layer Cache (In-Memory + Redis) |
+| **Background Jobs**| Hangfire |
+| **Real-time** | SignalR |
+| **API Security** | JWT, Rate Limiting, Multi-Tenancy, Security Headers |
+| **Logging** | Serilog with Correlation ID |
+
 ---
-## 2. Getting Started 🚀
+## 2. API Gateway (YARP) 🚪
 
-### Prerequisites
-* .NET 9 SDK
-* Docker (for running database, Redis, RabbitMQ)
-* A SQL Server instance
+The API Gateway is the public-facing entry point for the entire system. All clients (web, mobile) should only communicate with the Gateway.
 
-### Configuration
-1.  Clone the repository.
-2.  Open `src/WebAPI/appsettings.Development.json`.
-3.  Update the `ConnectionStrings` for your SQL Server and Redis instances.
-4.  Ensure all other settings (`JwtSettings`, `MessageBroker`, etc.) are configured as needed.
+### Request Flow
+The standard request flow is as follows:
+`Client` → `API Gateway (YARP)` → `WebAPI Service`
 
-### Running the Project
-# Navigate to the WebAPI project directory
-cd src/WebAPI
+The Gateway is responsible for initial validation and security, while the WebAPI service handles the business logic.
 
-# Run the application
-dotnet run
+### How to Add a New Route
+All routing is configured within the `appsettings.json` file of the `ApiGateway` project. To expose a new set of endpoints (e.g., for "Products"):
 
+1.  **Open `src/ApiGateway/appsettings.json`**.
+2.  Add a new entry under the `ReverseProxy:Routes` section.
+
+**Example: Adding a route for a new `Products` controller.**
+```json
+"ReverseProxy": {
+  "Routes": {
+    // ... existing routes for auth and users
+    "products-route": {
+      "ClusterId": "api-cluster",
+      "Order": 2, // Use Order to control which route matches first
+      "Match": {
+        "Path": "/api/products/{**catch-all}"
+      },
+      // Apply the same security policies as other secure routes
+      "Authentication": {
+        "Policy": "Default"
+      },
+      "RateLimiter": {
+        "Policy": "fixed"
+      }
+    }
+  },
+  "Clusters": {
+    // The cluster usually remains the same
+    "api-cluster": {
+      "Destinations": {
+        "destination1": {
+          "Address": "http://web-api:8080/"
+        }
+      }
+    }
+  }
+}
+```
 ---
 ## 3. Developer Workflows 👨‍💻
 
