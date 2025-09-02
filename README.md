@@ -28,7 +28,7 @@ This project is built upon **Clean Architecture** principles to create a decoupl
 | **Background Jobs**| Hangfire |
 | **Real-time** | SignalR |
 | **API Security** | JWT, Rate Limiting, Multi-Tenancy, Security Headers |
-| **Logging** | Serilog with Correlation ID |
+| **Observability** | Serilog, OpenTelemetry, Prometheus, Grafana, Jaeger |
 
 ---
 ## 2. API Gateway (YARP) 🚪
