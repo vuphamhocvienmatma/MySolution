@@ -7,10 +7,8 @@ namespace WebAPI.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-[EnableRateLimiting("fixed")]
 public class UsersController : ApiControllerBase
 {
-
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
     {

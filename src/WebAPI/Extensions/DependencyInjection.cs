@@ -124,45 +124,8 @@ public static class DependencyInjection
         // Exception Handling & Security
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
-        services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(options =>
-        {
-            var jwtSettings = configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()!;
-
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtSettings.Issuer,
-                ValidAudience = jwtSettings.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
-            };
-        });
         services.AddAuthorization();
-        services.AddRateLimiter(options =>
-        {
-            options.AddFixedWindowLimiter("fixed", opt =>
-            {
-                opt.PermitLimit = 10;
-                opt.Window = TimeSpan.FromSeconds(10);
-                opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-                opt.QueueLimit = 2;
-            });
-            options.OnRejected = (context, _) =>
-            {
-                context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-                return new ValueTask();
-            };
-        });
-        ;
-
-        // Background Jobs - Hangfire
-        services.AddHangfire(config => config
+                services.AddHangfire(config => config
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
     .UseSimpleAssemblyNameTypeSerializer()
     .UseRecommendedSerializerSettings()
